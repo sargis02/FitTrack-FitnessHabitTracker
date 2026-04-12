@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Dev Log page explains how I built the project step by step -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitTrack - Dev Log</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+
+  <body>
+    <header class="app-header">
+      <div class="header-content">
+        <div class="header-left">
+          <h1 class="app-title">
+            <span class="title-icon">&#9883;</span> FitTrack
+          </h1>
+          <p class="current-date" id="currentDate"></p>
+        </div>
+        <nav class="header-nav">
+          <a href="./index.html" class="nav-link">Tracker</a>
+          <a href="./planning.html" class="nav-link">Planning</a>
+          <a href="./devlog.html" class="nav-link active">Dev Log</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content docs-content">
+      <div class="doc-container">
+        <h2 class="doc-title">Development Log</h2>
+
+        <section class="doc-section">
+          <h3>Phase 1: Activity Form + Display</h3>
+          <div class="log-entry">
+            <span class="log-date">Day 1</span>
+            <p>
+              <strong>Built:</strong> The main HTML structure including header,
+              navigation bar, and card-based layout.
+            </p>
+            <p>
+              <strong>Reason:</strong> I wanted to first create a clear
+              structure before adding any functionality so that everything would
+              be organised from the start.
+            </p>
+            <p>
+              <strong>Reflection:</strong> This helped me understand how to
+              divide a web app into sections (form, stats, list, etc.). I also
+              decided early to use a card layout because it makes the UI easier
+              to read and expand later.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <p>FitTrack &copy; 2026 - Fitness & Habit Tracker | Nafiz Ahmed Sargis</p>
+    </footer>
+
+    <!-- Same simple date script for consistency on docs pages -->
+    <script>
+      document.getElementById("currentDate").textContent =
+        new Date().toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+    </script>
+  </body>
+</html>

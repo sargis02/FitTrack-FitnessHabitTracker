@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Planning page is mostly documentation, added early so nav works -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitTrack - Planning</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+
+  <body>
+    <header class="app-header">
+      <div class="header-content">
+        <div class="header-left">
+          <h1 class="app-title">
+            <span class="title-icon">&#9883;</span> FitTrack
+          </h1>
+          <p class="current-date" id="currentDate"></p>
+        </div>
+        <nav class="header-nav">
+          <a href="./index.html" class="nav-link">Tracker</a>
+          <a href="./planning.html" class="nav-link active">Planning</a>
+          <a href="./devlog.html" class="nav-link">Dev Log</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content docs-content">
+      <div class="doc-container">
+        <h2 class="doc-title">Planning</h2>
+        <section class="doc-section">
+          <h3>Notes</h3>
+          <p>Planning document will be added later in the build (Phase 8).</p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <p>FitTrack &copy; 2026 - Fitness & Habit Tracker | Nafiz Ahmed Sargis</p>
+    </footer>
+
+    <!-- Tiny script only for date on docs pages (keeps it simple) -->
+    <script>
+      document.getElementById("currentDate").textContent =
+        new Date().toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+    </script>
+  </body>
+</html>
