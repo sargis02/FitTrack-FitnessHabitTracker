@@ -1,9 +1,14 @@
 /**
  * At this phase I store activities only in memory.
  * That means refreshing the page clears them (localStorage comes later).
+ * In Phase 2, I add delete because:
+ * - it's a common CRUD feature
+ * - it teaches me DOM events on dynamically generated elements
+ *
+ * Still IMPORTANT: data is in-memory only (refresh clears it).
  */
 
-// In-memory list of activities (temporary for Phase 1)
+// In-memory storage for now
 let activities = [];
 
 /**
@@ -116,6 +121,14 @@ function renderCurrentDate() {
 }
 
 /**
+ * Phase 2: delete activity by id (from in-memory array).
+ * Later, when I add localStorage, this function will update storage too.
+ */
+function deleteActivity(id) {
+  activities = activities.filter((a) => a.id !== id);
+}
+
+/**
  * Render activities list into the DOM.
  * I sort newest first so the latest activity is always on top.
  */
@@ -146,10 +159,22 @@ function renderActivities() {
   container.innerHTML = sorted
     .map(
       (a) => `
-      <div class="activity-card">
-        <div class="activity-card-title">
-          ${escapeHtml(a.name)}
-          <span style="color:#64748b; font-weight:600;">(${a.type})</span>
+      <div class="activity-card" data-id="${a.id}">
+        <div class="activity-card-header">
+          <div class="activity-card-title">
+            ${escapeHtml(a.name)}
+            <span style="color:#64748b; font-weight:600;">(${a.type})</span>
+          </div>
+
+          <!-- Phase 2: delete button -->
+          <button
+            class="btn btn-danger btn-icon delete-btn"
+            data-id="${a.id}"
+            title="Delete"
+            type="button"
+          >
+            &#10005;
+          </button>
         </div>
 
         <div class="activity-card-details">
@@ -180,11 +205,11 @@ function renderAll() {
 /* ---------- App Start ---------- */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1) Default date to today (nice UX)
+  // Default date input to today (small UX improvement)
   const dateInput = document.getElementById("activityDate");
   if (dateInput) dateInput.value = toDateString(new Date());
 
-  // 2) Handle form submit
+  // Submit form → add activity (still in-memory)
   const form = document.getElementById("activityForm");
   if (form) {
     form.addEventListener("submit", (e) => {
@@ -221,6 +246,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 3) First render
+  /**
+   * Event delegation (Phase 2)
+   * I listen on the parent container because cards/buttons are created with innerHTML.
+   */
+  const list = document.getElementById("activitiesList");
+  if (list) {
+    list.addEventListener("click", (e) => {
+      const deleteBtn = e.target.closest(".delete-btn");
+      if (!deleteBtn) return;
+
+      const id = parseInt(deleteBtn.dataset.id, 10);
+      deleteActivity(id);
+
+      showSuccessMessage("Activity deleted");
+      renderActivities();
+    });
+  }
+
   renderAll();
 });
