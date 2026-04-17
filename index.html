@@ -38,8 +38,16 @@
     </header>
     <!-- Layout: left = create + motivation, right = discover + manage -->
     <main class="main-content">
-      <!-- quick stats bar -->
+      <!-- Streak + quick stats bar -->
       <section class="stats-bar" id="statsBar">
+        <div class="stats-item">
+          <span class="stats-icon">&#128293;</span>
+          <div class="stats-info">
+            <span class="stats-number" id="statStreak">0</span>
+            <span class="stats-label">Day Streak</span>
+          </div>
+        </div>
+
         <div class="stats-item">
           <span class="stats-icon">&#9989;</span>
           <div class="stats-info">
@@ -158,6 +166,38 @@
                 style="display: none"
               ></div>
             </form>
+          </section>
+
+          <!-- Goals -->
+          <section class="card goals-card">
+            <h2 class="card-title">Goal Tracking</h2>
+
+            <form id="goalForm" class="goal-form">
+              <!-- Simple inline row because it's a small form -->
+              <div class="form-row">
+                <input
+                  type="text"
+                  id="goalName"
+                  placeholder="Goal name (e.g., Run)"
+                  required
+                />
+                <input
+                  type="number"
+                  id="goalTarget"
+                  placeholder="Target"
+                  min="1"
+                  required
+                />
+                <button type="submit" class="btn btn-primary btn-small">
+                  Set Goal
+                </button>
+              </div>
+
+              <span class="error-message" id="goalError"></span>
+            </form>
+
+            <!-- JS renders goal items here -->
+            <div class="goals-list" id="goalsList"></div>
           </section>
         </div>
 

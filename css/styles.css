@@ -22,6 +22,11 @@
    FitTrack - Phase 6 Styles
    Phase 6 adds:
    - Filter/Search card styling (select inputs + search box)
+
+   FitTrack - Phase 7 Styles
+   Phase 7 adds:
+   - Goal card styling + progress bars
+   - Streak tile added to the stats bar
    ========================================================== */
 
 /* Design variables (easy to change colors in one place) */
@@ -43,6 +48,7 @@
   /* Phase 4: a neutral secondary button */
   --color-secondary: #e2e8f0;
   --color-secondary-hover: #cbd5e1;
+  --color-success: #10b981;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md:
@@ -155,7 +161,8 @@ body {
 /* Phase 5: stats bar */
 .stats-bar {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* stats bar now wraps naturally on small screens */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 0.75rem;
   margin-bottom: 1.25rem;
 }
@@ -296,6 +303,11 @@ body {
   background: var(--color-danger-hover);
 }
 
+.btn-small {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8rem;
+}
+
 /* Small buttons that sit inside cards */
 /* cancel button */
 .btn-secondary {
@@ -317,6 +329,93 @@ body {
 }
 .form-actions .btn {
   flex: 1;
+}
+
+/* Goal form row */
+.goal-form {
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.form-row input {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+  font-size: 0.85rem;
+  color: var(--color-text);
+  background: var(--color-card);
+}
+
+.form-row input[type="number"] {
+  max-width: 100px;
+}
+
+/* Goal item */
+.goal-item {
+  padding: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.65rem;
+  background: var(--color-bg);
+}
+
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.goal-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.goal-progress-text {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+/* Progress bar */
+.progress-bar-container {
+  background: var(--color-border);
+  border-radius: 20px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, var(--color-primary), #14b8a6);
+  transition: width 0.3s ease;
+}
+
+.progress-bar.complete {
+  background: linear-gradient(90deg, var(--color-success), #34d399);
+}
+
+.goal-delete {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.goal-delete:hover {
+  color: var(--color-danger);
 }
 
 /* Phase 6: Filter/Search card */
@@ -484,7 +583,7 @@ body {
 @media (min-width: 640px) {
   /* Stats bar becomes 4 columns on tablet+ */
   .stats-bar {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 }
 
@@ -495,9 +594,15 @@ body {
 
   .left-column {
     flex: 0 0 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
   .right-column {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 }

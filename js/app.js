@@ -26,11 +26,14 @@
  * 4) Average duration
  *
  * In Phase 6 I add filter and search
+ *
+ * In Phaase 7 I add streak counts and goals.
  */
 
 const STORAGE_KEYS = {
   // I keep keys here so I don't accidentally typo them later
   ACTIVITIES: "fittrack_activities",
+  GOALS: "fittrack_goals",
 };
 
 /**
@@ -150,6 +153,42 @@ function deleteActivity(id) {
   saveActivities(filtered);
 }
 
+/* Goals storage */
+function loadGoals() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.GOALS);
+    return raw ? JSON.parse(raw) : [];
+  } catch (err) {
+    console.error("Error loading goals:", err);
+    return [];
+  }
+}
+
+function saveGoals(goals) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(goals));
+  } catch (err) {
+    console.error("Error saving goals:", err);
+    showSuccessMessage("Error saving goals (storage may be full).", true);
+  }
+}
+
+function addGoal(name, target) {
+  const goals = loadGoals();
+  goals.push({
+    id: Date.now(),
+    name,
+    target: parseInt(target, 10),
+  });
+  saveGoals(goals);
+}
+
+function deleteGoal(id) {
+  const goals = loadGoals();
+  const filtered = goals.filter((g) => g.id !== id);
+  saveGoals(filtered);
+}
+
 /* ---------- Form Validation (basic but clear) ---------- */
 
 function clearErrors() {
@@ -261,6 +300,39 @@ function calculateStats() {
     monthly: monthActivities.length,
     avgDuration,
   };
+}
+
+/* Streak */
+function calculateStreak() {
+  const activities = loadActivities();
+  if (activities.length === 0) return 0;
+
+  const uniqueDates = [...new Set(activities.map((a) => a.date))]
+    .sort()
+    .reverse();
+  if (uniqueDates.length === 0) return 0;
+
+  const today = toDateString(new Date());
+  const yesterday = toDateString(new Date(Date.now() - 86400000));
+
+  // Current-streak rule: must include today or yesterday
+  if (uniqueDates[0] !== today && uniqueDates[0] !== yesterday) return 0;
+
+  let streak = 0;
+  let checkDate =
+    uniqueDates[0] === today ? new Date() : new Date(Date.now() - 86400000);
+
+  for (let i = 0; i < 365; i++) {
+    const ds = toDateString(checkDate);
+    if (uniqueDates.includes(ds)) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+
+  return streak;
 }
 
 /**
@@ -385,7 +457,9 @@ function renderCurrentDate() {
 function renderStatsBar() {
   // now stast are visible and updated on every render, based on current localStorage data
   const stats = calculateStats();
+  const streak = calculateStreak();
 
+  document.getElementById("statStreak").textContent = streak;
   document.getElementById("statTotal").textContent = stats.total;
   document.getElementById("statWeekly").textContent = stats.weekly;
   document.getElementById("statMonthly").textContent = stats.monthly;
@@ -428,7 +502,11 @@ function renderActivities() {
 
           <!-- edit + delete button -->
           <div class="activity-card-actions">
-            <button class="btn btn-secondary btn-icon edit-btn" data-id="${a.id}" title="Edit" type="button">
+            <button class="btn btn-secondary btn-icon edit-btn" 
+              data-id="${a.id}" 
+              title="Edit" 
+              type="button"
+            >
               &#9998;
             </button>
             <button
@@ -462,10 +540,54 @@ function renderActivities() {
     .join("");
 }
 
+function renderGoals() {
+  const container = document.getElementById("goalsList");
+  if (!container) return;
+
+  const goals = loadGoals();
+  const activities = loadActivities();
+
+  if (goals.length === 0) {
+    container.innerHTML =
+      '<p style="color:#94a3b8; font-size:0.85rem; text-align:center; padding:0.75rem;">No goals set yet. Add one above!</p>';
+    return;
+  }
+
+  container.innerHTML = goals
+    .map((g) => {
+      const matches = activities.filter((a) =>
+        (a.name || "").toLowerCase().includes((g.name || "").toLowerCase()),
+      );
+
+      const current = matches.length;
+      const percentage = Math.min(Math.round((current / g.target) * 100), 100);
+      const complete = percentage >= 100;
+
+      return `
+      <div class="goal-item">
+        <div class="goal-header">
+          <span class="goal-name">${escapeHtml(g.name)}</span>
+
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span class="goal-progress-text">${current}/${g.target} (${percentage}%)</span>
+            <button class="goal-delete" data-goal-id="${g.id}" title="Remove goal" type="button">&#10005;</button>
+          </div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar ${complete ? "complete" : ""}" style="width:${percentage}%"></div>
+        </div>
+      </div>
+    `;
+    })
+    .join("");
+}
+
 function renderAll() {
   renderCurrentDate();
   renderStatsBar();
   renderActivities();
+  renderGoals();
 }
 
 /* ---------- App Start ---------- */
@@ -534,7 +656,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-    //when filters change, just re-render list
+  const goalForm = document.getElementById("goalForm");
+  if (goalForm) {
+    goalForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("goalName").value.trim();
+      const target = document.getElementById("goalTarget").value;
+      const goalError = document.getElementById("goalError");
+
+      if (!name || !target || parseInt(target, 10) < 1) {
+        goalError.textContent = "Please enter a goal name and a target number";
+        return;
+      }
+
+      goalError.textContent = "";
+      addGoal(name, target);
+
+      document.getElementById("goalName").value = "";
+      document.getElementById("goalTarget").value = "";
+
+      showSuccessMessage("Goal added!");
+      renderAll();
+    });
+  }
+
+  //when filters change, just re-render list
   const filterType = document.getElementById("filterType");
   const filterDate = document.getElementById("filterDate");
   const searchInput = document.getElementById("searchInput");
@@ -572,6 +719,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         renderAll();
       }
+    });
+  }
+
+  // Goal actions
+  const goalsList = document.getElementById("goalsList");
+  if (goalsList) {
+    goalsList.addEventListener("click", (e) => {
+      const btn = e.target.closest(".goal-delete");
+      if (!btn) return;
+
+      deleteGoal(parseInt(btn.dataset.goalId, 10));
+      showSuccessMessage("Goal removed");
+      renderAll();
     });
   }
 
