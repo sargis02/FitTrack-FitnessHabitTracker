@@ -32,6 +32,11 @@
  * In Phase 8 I added:
  * - weekly bar chart
  * - Statistics Dashboard
+ *
+ * In phase 9 I added:
+ * - Export JSON or Export CSV feature
+ * - Confirmation modal for destructive actions (delete activity, delete goal)
+ *
  */
 
 const STORAGE_KEYS = {
@@ -252,8 +257,6 @@ function validateForm() {
  * - else go back (day - 1)
  * I used AI and online references to
  * confirm the logic and edge cases.
- * 
- * I used AI to confirm the logic and edge cases, especially around Sunday and month boundaries.
  */
 function getStartOfWeek() {
   const now = new Date();
@@ -313,11 +316,6 @@ function calculateStats() {
   };
 }
 
-
-/* I used AI to help me design the streak logic, which can be tricky with edge 
-cases around today/yesterday and gaps in activity. The main rule is that the 
-streak counts consecutive days with at least one activity, and it must include 
-either today or yesterday to be considered active. */
 /* Streak */
 function calculateStreak() {
   const activities = loadActivities();
@@ -411,10 +409,6 @@ function startEditActivity(id) {
  * I keep this as a separate function because:
  * - It's easier to debug
  * - It's easier to extend later (like adding more filters)
- * 
- * I used AI to help me design the filtering logic and ensure it works correctly 
- * together (type + date + search) without conflicts. I also made sure the sorting 
- * by date and id works as expected, especially when multiple activities have the same date.
  */
 function getFilteredActivities() {
   let activities = loadActivities();
@@ -663,6 +657,88 @@ function renderWeeklyChart() {
     .join("");
 }
 
+// Export JSON and CSV
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+
+  document.body.appendChild(a);
+  a.click();
+
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportAsJson() {
+  const activities = loadActivities();
+  if (activities.length === 0) {
+    showSuccessMessage("No data to export", true);
+    return;
+  }
+
+  const json = JSON.stringify(activities, null, 2);
+  downloadFile(json, "fittrack-data.json", "application/json");
+  showSuccessMessage("Exported JSON");
+}
+
+/* I faced challenge to make this export to CSV because it break when 
+text includes commas or quotes. Then i used AI assistance and online resources to implement 
+a simple CSV escaping logic that wraps values in quotes and doubles internal
+quotes. This way, the export works correctly even with complex text inputs.
+ */
+
+function exportAsCsv() {
+  const activities = loadActivities();
+  if (activities.length === 0) {
+    showSuccessMessage("No data to export", true);
+    return;
+  }
+
+  const headers = [
+    "ID",
+    "Type",
+    "Name",
+    "Duration",
+    "Date",
+    "Notes",
+    "Created At",
+  ];
+
+  // CSV escaping: wrap strings in quotes and double any internal quotes
+  const rows = activities.map((a) => [
+    a.id,
+    a.type,
+    `"${String(a.name || "").replace(/"/g, '""')}"`,
+    a.duration,
+    a.date,
+    `"${String(a.notes || "").replace(/"/g, '""')}"`,
+    a.createdAt || "",
+  ]);
+
+  const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+  downloadFile(csv, "fittrack-data.csv", "text/csv");
+  showSuccessMessage("Exported CSV");
+}
+
+// Confirmation modal logic
+
+let modalConfirmCallback = null;
+
+function showConfirmModal(message, onConfirm) {
+  document.getElementById("modalMessage").textContent = message;
+  document.getElementById("confirmModal").style.display = "flex";
+  modalConfirmCallback = onConfirm;
+}
+
+function hideConfirmModal() {
+  document.getElementById("confirmModal").style.display = "none";
+  modalConfirmCallback = null;
+}
+
 function renderAll() {
   renderCurrentDate();
   renderStatsBar();
@@ -814,6 +890,50 @@ document.addEventListener("DOMContentLoaded", () => {
       deleteGoal(parseInt(btn.dataset.goalId, 10));
       showSuccessMessage("Goal removed");
       renderAll();
+    });
+  }
+
+  // Export buttons
+  const exportJsonBtn = document.getElementById("exportJsonBtn");
+  const exportCsvBtn = document.getElementById("exportCsvBtn");
+  if (exportJsonBtn) exportJsonBtn.addEventListener("click", exportAsJson);
+  if (exportCsvBtn) exportCsvBtn.addEventListener("click", exportAsCsv);
+
+  // Clear all data (with confirm modal)
+  const clearAllBtn = document.getElementById("clearAllBtn");
+  if (clearAllBtn) {
+    clearAllBtn.addEventListener("click", () => {
+      showConfirmModal(
+        "This will permanently delete ALL activities and goals. Are you sure?",
+        () => {
+          localStorage.removeItem(STORAGE_KEYS.ACTIVITIES);
+          localStorage.removeItem(STORAGE_KEYS.GOALS);
+          resetForm();
+          showSuccessMessage("All data cleared");
+          renderAll();
+        },
+      );
+    });
+  }
+
+  // Modal buttons
+  const modalConfirm = document.getElementById("modalConfirm");
+  const modalCancel = document.getElementById("modalCancel");
+
+  if (modalConfirm) {
+    modalConfirm.addEventListener("click", () => {
+      if (modalConfirmCallback) modalConfirmCallback();
+      hideConfirmModal();
+    });
+  }
+
+  if (modalCancel) modalCancel.addEventListener("click", hideConfirmModal);
+
+  // Close modal if user clicks the overlay background
+  const confirmModal = document.getElementById("confirmModal");
+  if (confirmModal) {
+    confirmModal.addEventListener("click", (e) => {
+      if (e.target === confirmModal) hideConfirmModal();
     });
   }
 

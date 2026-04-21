@@ -293,9 +293,36 @@
               </div>
             </div>
           </section>
+
+          <!-- Data tools -->
+          <section class="card data-card">
+            <h2 class="card-title">Data Management</h2>
+            <div class="data-actions">
+              <button class="btn btn-secondary" id="exportJsonBtn">
+                Export JSON
+              </button>
+              <button class="btn btn-secondary" id="exportCsvBtn">
+                Export CSV
+              </button>
+              <button class="btn btn-danger" id="clearAllBtn">
+                Clear All Data
+              </button>
+            </div>
+          </section>
         </div>
       </div>
     </main>
+
+    <!-- confirmation modal for destructive actions -->
+    <div class="modal-overlay" id="confirmModal" style="display: none">
+      <div class="modal">
+        <p class="modal-message" id="modalMessage">Are you sure?</p>
+        <div class="modal-actions">
+          <button class="btn btn-danger" id="modalConfirm">Confirm</button>
+          <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+        </div>
+      </div>
+    </div>
 
     <footer class="app-footer">
       <p>FitTrack &copy; 2026 - Fitness & Habit Tracker | Nafiz Ahmed Sargis</p>

@@ -33,7 +33,12 @@
    - Weekly bar chart 
    - Statistics Dashboard grid layout
 
-   ========================================================== */
+   FirTrack - Phase 9 Styles
+   Phase 9 adds:
+   - Data Management buttons
+   - Confirmation modal 
+   - Small animation + focus styles
+      ========================================================== */
 
 /* Design variables (easy to change colors in one place) */
 :root {
@@ -80,6 +85,10 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /* Overall page layout: header + main + footer */
@@ -154,6 +163,14 @@ body {
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
   font-weight: 500;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
 }
 
 .nav-link.active {
@@ -188,6 +205,14 @@ body {
   gap: 0.75rem;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+.stats-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .stats-icon {
@@ -260,6 +285,17 @@ body {
   font-size: 0.9rem;
   background: var(--color-card);
   color: var(--color-text);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
 }
 
 .form-group textarea {
@@ -299,11 +335,23 @@ body {
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s,
+    box-shadow 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.97);
 }
 
 .btn-primary {
   background: var(--color-primary);
   color: white;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-sm);
 }
 
 /* Phase 2: delete button */
@@ -494,6 +542,14 @@ body {
   border-radius: var(--radius-sm);
   padding: 1rem 1.1rem;
   background: var(--color-bg);
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s;
+}
+
+.activity-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 /* Phase 2: header row inside the card */
@@ -537,9 +593,9 @@ body {
   margin-bottom: 0.65rem;
   opacity: 0.6;
 }
-/* ==========================================================
-   STATISTICS DASHBOARD (Phase 8 addition)
-   ========================================================== */
+
+/* STATISTICS DASHBOARD */
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -625,6 +681,59 @@ body {
   font-weight: 700;
 }
 
+/* Phase 8: Data management buttons */
+.data-actions {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.data-actions .btn {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* Phase 8: Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.15s ease;
+}
+
+.modal {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.2s ease;
+}
+
+.modal-message {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.modal-actions .btn {
+  flex: 1;
+}
+
 /* Docs page layout (planning + devlog) */
 .docs-content {
   max-width: 820px;
@@ -640,7 +749,7 @@ body {
 
 .doc-title {
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 1.75rem;
   padding-bottom: 0.75rem;
   border-bottom: 2px solid var(--color-border);
@@ -654,6 +763,7 @@ body {
   background: var(--color-bg);
   border-radius: var(--radius-sm);
   padding: 1.25rem;
+  margin-bottom: 1rem;
   border: 1px solid var(--color-border);
 }
 
@@ -664,8 +774,101 @@ body {
   padding: 0.15rem 0.65rem;
   border-radius: 20px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 0.65rem;
+}
+
+/* Planning Page Layout */
+
+.wireframe-block {
+  margin-bottom: 1.5rem;
+}
+
+.wireframe-image {
+  width: 100%;
+  max-width: none;
+}
+
+.design-choice {
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 0.82rem;
+  overflow-x: auto;
+  line-height: 1.6;
+  margin: 0.75rem 0;
+  white-space: pre;
+}
+
+
+/* --- Color Palette Layout --- */
+.color-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* --- Swatch Card --- */
+.color-swatch {
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  min-height: 80px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.2rem;
+}
+
+/* --- Text Styles --- */
+.swatch-label {
+  font-family: "Menlo", monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.swatch-name {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* --- Background Colors --- */
+.color-swatch.navy {
+  background-color: var(--color-header);
+}
+
+.color-swatch.teal {
+  background-color: var(--color-primary);
+}
+
+.color-swatch.purple {
+  background-color: var(--color-habit);
+}
+
+.color-swatch.green {
+  background-color: var(--color-success);
+}
+
+.color-swatch.red {
+  background-color: var(--color-danger);
+}
+
+.color-swatch.light {
+  background-color: var(--color-bg);
+}
+
+/* --- for light background --- */
+.color-swatch.light .swatch-label,
+.color-swatch.light .swatch-name {
+  color: var(--color-text);
 }
 
 /* Footer matches header (simple app frame) */
@@ -676,6 +879,37 @@ body {
   padding: 1.25rem;
   font-size: 0.8rem;
   margin-top: 2rem;
+}
+
+/* Focus styles (keyboard-friendly) */
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.nav-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (min-width: 640px) {
@@ -700,7 +934,7 @@ body {
   }
 
   .left-column {
-    flex: 0 0 420px;
+    flex: 0 0 440px;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;

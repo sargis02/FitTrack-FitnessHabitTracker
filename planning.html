@@ -1,11 +1,9 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Planning page is mostly documentation, added early so nav works -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FitTrack - Planning</title>
-
+    <title>FitTrack - Planning & Design</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,7 +12,6 @@
     />
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
-
   <body>
     <header class="app-header">
       <div class="header-content">
@@ -34,10 +31,256 @@
 
     <main class="main-content docs-content">
       <div class="doc-container">
-        <h2 class="doc-title">Planning</h2>
+        <h2 class="doc-title">Planning & Design Document</h2>
+
+        <!-- Project Overview -->
         <section class="doc-section">
-          <h3>Notes</h3>
-          <p>Planning document will be added later in the build.</p>
+          <h3>1. Project Overview</h3>
+          <p>
+            FitTrack is a comprehensive fitness and habit tracking web
+            application designed to help users monitor their workouts, build
+            healthy habits, set goals, and visualize their progress over time.
+            The application is built entirely with HTML5, CSS3, and JavaScript
+            with no frameworks or external libraries are used for functionality.
+          </p>
+        </section>
+
+        <!-- Development Approach -->
+        <section class="doc-section">
+          <h3>2. Development Approach</h3>
+          <h4>2.1 Phase-Based Development Strategy</h4>
+          <p>
+            Before starting development, the entire project was broken down into
+            9 distinct phases. This structured approach was used to ensure
+            steady progress, reduce complexity, and avoid becoming overwhelmed
+            during development.
+          </p>
+          <p>
+            Each phase focused on a specific set of features or improvements,
+            such as building the core layout, implementing activity tracking,
+            adding editing functionality, and later enhancing the application
+            with statistics, filtering, and data management.
+          </p>
+          <p>
+            By developing the application step by step, it became easier to:
+          </p>
+          <ul>
+            <li>Maintain clarity on what needed to be built next</li>
+            <li>Debug issues without affecting the entire system</li>
+            <li>Test features incrementally after each phase</li>
+            <li>Gradually improve both functionality and user experience</li>
+          </ul>
+          <p>
+            This phase-based workflow helped ensure the project remained
+            organized, manageable, and scalable throughout the development
+            process.
+          </p>
+          <h4>2.2 Phase Overview</h4>
+          <ul>
+            <li><strong>Phase 1:</strong> Setup + Activity Form + Display List</li>
+            <li><strong>Phase 2:</strong> Activity functionality</li>
+            <li><strong>Phase 3:</strong> Data storage with localStorage</li>
+            <li><strong>Phase 4:</strong> Edit and delete features</li>
+            <li><strong>Phase 5:</strong> Statistics and summary bar</li>
+            <li><strong>Phase 6:</strong> Filtering and search</li>
+            <li><strong>Phase 7:</strong> Goal tracking + Streak Counter</li>
+            <li><strong>Phase 8:</strong> Charts and Analytics Dashboard</li>
+            <li><strong>Phase 9:</strong> Data management, Confirmation Modals and final polish</li>
+          </ul>
+        </section>
+
+        <!-- Wireframe Descriptions -->
+        <section class="doc-section">
+          <h3>3. Wireframe Descriptions</h3>
+
+          <div class="wireframe-block">
+            <h4>3.1 Main Tracker Page (index.html)</h4>
+            <div class="wireframe-diagram">
+              <img
+                src="images/wireframe.jpeg"
+                alt="Wireframe of Main Tracker Page"
+                class="wireframe-image"
+              />
+            </div>
+            <p>
+              <strong>Layout Decision:</strong> A two column layout was chosen
+              so users can add activities on the left while viewing their
+              activity list on the right. On mobile, this collapses to a single
+              column for optimal readability.
+            </p>
+          </div>
+
+          <div class="wireframe-block">
+            <h4>3.2 Streak Bar</h4>
+            <p>
+              Positioned prominently at the top of the content area to provide
+              instant motivation. The streak counter uses a fire emoji and bold
+              numbers to create a sense of achievement. The four quick stat
+              items (streak, total, weekly, monthly, avg duration) give users an
+              at a glance overview.
+            </p>
+          </div>
+
+          <div class="wireframe-block">
+            <h4>3.3 Activity Cards</h4>
+            <p>
+              Each activity is displayed as a card with a colored left border
+              indicating its type (teal for workouts, purple for habits). Cards
+              show all relevant information (name, type badge, date, duration,
+              notes) with edit and delete action buttons.
+            </p>
+          </div>
+        </section>
+
+        <!-- Design Choices -->
+        <section class="doc-section">
+          <h3>4. Design Choices</h3>
+
+          <div class="design-choice">
+            <h4>4.1 Typography</h4>
+            <p>
+              <strong>Font:</strong> Inter (Google Fonts) chosen for its
+              excellent readability on screens, clean geometric design, and wide
+              weight range. It conveys a modern, professional feel appropriate
+              for a productivity tool.
+            </p>
+          </div>
+
+          <div class="design-choice">
+            <h4>4.2 Layout Strategy</h4>
+            <p>
+              <strong>Mobile-First Responsive:</strong> The CSS is written
+              mobile first, with media queries adding complexity for larger
+              screens. The two column grid activates at 900px width. CSS Grid
+              and Flexbox are used throughout for clean, flexible layouts.
+            </p>
+          </div>
+
+          <div class="design-choice">
+            <h4>4.3 Component Design</h4>
+            <p>
+              <strong>Card-Based UI:</strong> All content sections use a card
+              pattern with consistent border radius, padding, and subtle
+              shadows. This creates visual hierarchy and groups related content
+              together.
+            </p>
+          </div>
+
+          <div class="design-choice">
+            <h4>4.4 Interaction Patterns</h4>
+            <ul>
+              <li>
+                <strong>Form Validation:</strong> Realtime validation with clear
+                red error messages below each field
+              </li>
+              <li>
+                <strong>Edit Flow:</strong> Clicking edit prefills the form and
+                changes the submit button text to "Update"
+              </li>
+              <li>
+                <strong>Delete Confirmation:</strong> A modal dialog prevents
+                accidental deletion
+              </li>
+              <li>
+                <strong>Success Feedback:</strong> Green success messages
+                confirm completed actions
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Color Palette -->
+        <section class="doc-section">
+          <h3>5. Color Palette</h3>
+
+          <div class="color-palette">
+            <div class="color-swatch navy">
+              <span class="swatch-label">#0F172A</span>
+              <span class="swatch-name">Dark Navy - Header/Footer</span>
+            </div>
+
+            <div class="color-swatch teal">
+              <span class="swatch-label">#0D9488</span>
+              <span class="swatch-name">Teal - Workout Accent</span>
+            </div>
+
+            <div class="color-swatch purple">
+              <span class="swatch-label">#7C3AED</span>
+              <span class="swatch-name">Purple - Habit Accent</span>
+            </div>
+
+            <div class="color-swatch green">
+              <span class="swatch-label">#10B981</span>
+              <span class="swatch-name">Green - Success</span>
+            </div>
+
+            <div class="color-swatch red">
+              <span class="swatch-label">#EF4444</span>
+              <span class="swatch-name">Red - Danger/Delete</span>
+            </div>
+
+            <div class="color-swatch light">
+              <span class="swatch-label">#F8FAFC</span>
+              <span class="swatch-name">Off-White - Background</span>
+            </div>
+          </div>
+          <div class="design-choice">
+            <h4>Color Rationale</h4>
+            <p>
+              The palette was chosen to create clear visual distinction between
+              activity types while maintaining a professional, motivating feel.
+              Teal represents physical workouts (associated with
+              health/vitality), while purple represents habits (associated with
+              mindfulness/growth). The dark navy header provides strong
+              contrast, and the off-white background ensures readability during
+              extended use.
+            </p>
+          </div>
+        </section>
+
+        <!-- Accessibility Considerations -->
+        <section class="doc-section">
+          <h3>6. Accessibility Considerations</h3>
+          <ul>
+            <li>
+              All form inputs have associated labels for screen reader
+              compatibility
+            </li>
+            <li>Interactive elements have visible focus states</li>
+            <li>
+              Error messages are associated with their respective form fields
+            </li>
+          </ul>
+        </section>
+
+        <!-- Data Architecture -->
+        <section class="doc-section">
+          <h3>7. Data Architecture</h3>
+          <p>
+            Activities are stored as an array of objects in localStorage with
+            the following structure:
+          </p>
+
+          <!-- Challenge faced: HTML breaks easily if quotes are missing inside attributes.
+                     Solution: ensure class attribute is properly closed (class="code-block"). -->
+          <pre class="code-block">
+{
+  id: "unique-timestamp-based-id",
+  type: "workout" | "habit",
+  name: "Activity Name",
+  duration: 30,
+  date: "2026-04-09",
+  notes: "Optional notes",
+  createdAt: "ISO timestamp"
+}
+                </pre
+          >
+
+          <p>
+            Goals use a separate localStorage key with a similar object
+            structure including name, target value, and current progress
+            tracking.
+          </p>
         </section>
       </div>
     </main>
@@ -46,7 +289,6 @@
       <p>FitTrack &copy; 2026 - Fitness & Habit Tracker | Nafiz Ahmed Sargis</p>
     </footer>
 
-    <!-- Tiny script only for date on docs pages (keeps it simple) -->
     <script>
       document.getElementById("currentDate").textContent =
         new Date().toLocaleDateString("en-US", {
