@@ -149,9 +149,10 @@ AI was not used to generate full features or complete code solutions. It was onl
 
 
 
-## 📂 File Structure
+## File Structure
 
-StudentID_CSC2406_A2/
+```
+FitTrack---Fitness-Habit-Tracker/
 ├── index.html
 ├── planning.html
 ├── devlog.html
@@ -161,9 +162,11 @@ StudentID_CSC2406_A2/
 │   └── app.js
 ├── images/
 └── README.md
+```
 
 
 
-## ✅ Declaration
+
+## Declaration
 
 I declare that this assignment is my own work and all sources have been appropriately acknowledged.
